@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ApiService from './services/ApiService'
 import type Task from './models/Task';
 import TaskComponent from './components/Task/Task.component';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 function App() {
   const api = new ApiService();
@@ -10,11 +13,11 @@ function App() {
 
   useEffect(() => {
     loadTasks();
-  }, tasks);
+  }, []);
   
   function loadTasks() {
     api.getTasks().then(data => {
-      console.log(data);
+      if (data?.success) setTasks(data.tasks);
     });
   }
 
@@ -25,18 +28,29 @@ function App() {
           <h1>Task Manager</h1>
           <p>View, edit, and delete your tasks below.</p>
         </div>
-      </section>
 
-      <section id="tasks">
-        {tasks.length ? (
-          <>
-            {tasks.map(task => <TaskComponent task={task} />)}
-          </>
-        ) : (
-          <>
-            <p>No tasks found.</p>
-          </>
-        )}
+        <Form>
+          <Form.Group>
+            <Form.Label>Create a new task</Form.Label>
+            <Form.Control id="addTaskField" type="text" />
+          </Form.Group>
+
+          <Button variant="primary">
+            <i className="bi bi-plus-circle"></i> Add
+          </Button>
+        </Form>
+
+        <div>
+          {tasks.length ? (
+            <>
+              {tasks.map(task => <TaskComponent task={task} key={task.id} />)}
+            </>
+          ) : (
+            <>
+              <p>No tasks found.</p>
+            </>
+          )}
+        </div>
       </section>
     </>
   )

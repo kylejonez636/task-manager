@@ -1,4 +1,5 @@
 import { AppConfig } from '../App.config';
+import type Task from '../models/Task';
 
 export default class ApiService {
 	apiUrl: string;
@@ -10,6 +11,30 @@ export default class ApiService {
 	async getTasks() {
 		return await this.doFetch(`${this.apiUrl}/tasks`, { method: 'GET' });
 	}
+
+  async createTask(task: Task) {
+    return await this.doFetch(`${this.apiUrl}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(task)
+    });
+  }
+
+  async updateTask(task: Task) {
+    return await this.doFetch(`${this.apiUrl}/tasks/${task.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(task)
+    });
+  }
+
+  async deleteTask(taskId: string) {
+    return await this.doFetch(`${this.apiUrl}/tasks/${taskId}`, { method: 'DELETE '});
+  }
 
 	async doFetch(url: string, options: object) {
 		try {

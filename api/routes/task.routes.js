@@ -24,5 +24,27 @@ module.exports = (app) => {
     }
   });
 
+  // Update a task
+	router.patch('/:taskId', async (req, res) => {
+    try {
+      await task.update(req, res);
+    }
+    catch (err) {
+      console.error(err);
+      res.send(err);
+    }
+  });
+
+  // Delete a task
+	router.delete('/:taskId', async (req, res) => {
+    try {
+      await task.delete(req, res);
+    }
+    catch (err) {
+      console.error(err);
+      res.send(err);
+    }
+  });
+
   app.use('/api/tasks', router);
 };
