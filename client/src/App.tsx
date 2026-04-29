@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 function App() {
   const api = new ApiService();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskInput, setTaskInput] = useState('');
 
   useEffect(() => {
     loadTasks();
@@ -21,6 +22,17 @@ function App() {
     });
   }
 
+  function addTask() {
+    if (!taskInput) return;
+
+    api.createTask(taskInput).then(result => {
+      if (result?.success) {
+        loadTasks();
+        setTaskInput('');
+      }
+    });
+  }
+
   return (
     <>
       <section id="center">
@@ -29,21 +41,37 @@ function App() {
           <p>View, edit, and delete your tasks below.</p>
         </div>
 
-        <Form>
-          <Form.Group>
-            <Form.Label>Create a new task</Form.Label>
-            <Form.Control id="addTaskField" type="text" />
-          </Form.Group>
+        <div className="addTaskSection">
+          {tasks.length <= 10 ? (
+            <>
+              <Form.Group>
+                <Form.Label>Create a new task</Form.Label>
+                <Form.Control
+                  id="addTaskField"
+                  type="text"
+                  value={taskInput}
+                  onChange={e => setTaskInput(e.target.value)}
+                  maxLength={50}
+                />
+              </Form.Group>
 
-          <Button variant="primary">
-            <i className="bi bi-plus-circle"></i> Add
-          </Button>
-        </Form>
+              <div className="addTaskButton">
+                <Button variant="primary" onClick={addTask} disabled={!taskInput}>
+                  <i className="bi bi-plus-circle"></i> Add
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>A maximum of 10 tasks is allowed.</p>
+            </>
+          )}
+        </div>
 
         <div>
           {tasks.length ? (
             <>
-              {tasks.map(task => <TaskComponent task={task} key={task.id} />)}
+              {tasks.map(task => <TaskComponent api={api} task={task} onLoadTasks={loadTasks} key={task.id} />)}
             </>
           ) : (
             <>

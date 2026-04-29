@@ -12,13 +12,13 @@ export default class ApiService {
 		return await this.doFetch(`${this.apiUrl}/tasks`, { method: 'GET' });
 	}
 
-  async createTask(task: Task) {
+  async createTask(text: string) {
     return await this.doFetch(`${this.apiUrl}/tasks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(task)
+      body: JSON.stringify({ text })
     });
   }
 
@@ -33,7 +33,7 @@ export default class ApiService {
   }
 
   async deleteTask(taskId: string) {
-    return await this.doFetch(`${this.apiUrl}/tasks/${taskId}`, { method: 'DELETE '});
+    return await this.doFetch(`${this.apiUrl}/tasks/${taskId}`, { method: 'DELETE' });
   }
 
 	async doFetch(url: string, options: object) {
