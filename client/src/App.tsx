@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type SetStateAction } from 'react'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ApiService from './services/ApiService'
@@ -11,6 +11,10 @@ function App() {
   const api = new ApiService();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState('');
+
+  const handleChange = (value: string, setInput: React.Dispatch<SetStateAction<string>>) => {
+    if (value.length <= 50) setInput(value);
+  };
 
   useEffect(() => {
     loadTasks();
@@ -42,7 +46,7 @@ function App() {
         </div>
 
         <div className="addTaskSection">
-          {tasks.length <= 10 ? (
+          {tasks.length < 10 ? (
             <>
               <Form.Group>
                 <Form.Label>Create a new task</Form.Label>
@@ -50,8 +54,7 @@ function App() {
                   id="addTaskField"
                   type="text"
                   value={taskInput}
-                  onChange={e => setTaskInput(e.target.value)}
-                  maxLength={50}
+                  onChange={e => handleChange(e.target.value, setTaskInput)}
                 />
               </Form.Group>
 
@@ -71,7 +74,7 @@ function App() {
         <div>
           {tasks.length ? (
             <>
-              {tasks.map(task => <TaskComponent api={api} task={task} onLoadTasks={loadTasks} key={task.id} />)}
+              {tasks.map(task => <TaskComponent api={api} task={task} onLoadTasks={loadTasks} onHandleInput={handleChange} key={task.id} />)}
             </>
           ) : (
             <>

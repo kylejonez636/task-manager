@@ -14,7 +14,7 @@ module.exports = (app) => {
   });
 
   // Create a task
-	router.post('/', async (req, res) => {
+	router.post('/', task.validate('post'), async (req, res) => {
     try {
       await task.create(req, res);
     }
@@ -25,7 +25,7 @@ module.exports = (app) => {
   });
 
   // Update a task
-	router.patch('/:taskId', async (req, res) => {
+	router.patch('/:taskId', task.validate('patch'), async (req, res) => {
     try {
       await task.update(req, res);
     }
@@ -36,7 +36,7 @@ module.exports = (app) => {
   });
 
   // Delete a task
-	router.delete('/:taskId', async (req, res) => {
+	router.delete('/:taskId', task.validate('delete'), async (req, res) => {
     try {
       await task.delete(req, res);
     }

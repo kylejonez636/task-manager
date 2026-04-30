@@ -39,6 +39,7 @@ export default class ApiService {
 	async doFetch(url: string, options: object) {
 		try {
 			const res = await fetch(url, options);
+      if (res.status === 204) return;
 			return await res.json();
 		} catch (err) {
 			console.error('Error fetching: ', err);

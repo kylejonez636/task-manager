@@ -1,15 +1,20 @@
-import { useState } from 'react';
+import { useState, type SetStateAction } from 'react';
 import type Task from '../../models/Task';
 import type ApiService from '../../services/ApiService';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-function TaskComponent({ api, task, onLoadTasks }: { api: ApiService, task: Task, onLoadTasks: () => void }) {
+function TaskComponent({ api, task, onLoadTasks, onHandleInput }: { api: ApiService, task: Task, onLoadTasks: () => void, onHandleInput: (value: string, setInput: React.Dispatch<SetStateAction<string>>) => void }) {
   const [text, setText] = useState(task.text);
   const [completed, setCompleted] = useState(task.completed);
 
   function updateTask() {
-    console.log('clicked update for', task);
+    const updatedTask: Task = {
+      id: task.id,
+      text,
+      completed,
+    };
+    api.updateTask(updatedTask).then(() => onLoadTasks());
   }
 
   function deleteTask() {
@@ -28,7 +33,7 @@ function TaskComponent({ api, task, onLoadTasks }: { api: ApiService, task: Task
         id={`task-text-${task.id}`}
         type="text"
         value={text}
-        onChange={e => setText(e.target.value)}
+        onChange={e => onHandleInput(e.target.value, setText)}
       />
 
       <Button variant="success" onClick={updateTask}>

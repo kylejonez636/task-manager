@@ -37,9 +37,13 @@ class Task {
     try {
       const tasks = await readTasks();
       const index = tasks.findIndex(t => t.id === task.id);
-      if (index === -1) return { success: false, status: 404, message: 'Task not found' };
 
-      tasks[index] = { ...tasks[index], ...task };
+      // Do a partial update by filtering out null values
+      const partialTask = Object.fromEntries(
+        Object.entries(task).filter(([_, value]) => value !== null)
+      );
+      tasks[index] = { ...tasks[index], ...partialTask };
+
       await writeTasks(tasks);
       return { success: true, status: 204, task };
     }
@@ -52,7 +56,6 @@ class Task {
     try {
       const tasks = await readTasks();
       const index = tasks.findIndex(t => t.id === taskId);
-      if (index === -1) return { success: false, status: 404, message: 'Task not found' };
 
       tasks.splice(index, 1);
       await writeTasks(tasks);
