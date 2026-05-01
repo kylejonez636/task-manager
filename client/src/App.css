@@ -65,3 +65,15 @@
     margin-left: 1rem;
   }
 }
+
+.input-field {
+  width: 50% !important;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.full-width {
+  width: 100%;
+}

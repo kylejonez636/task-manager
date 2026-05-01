@@ -34,6 +34,7 @@ function TaskComponent({ api, task, onLoadTasks, onHandleInput }: { api: ApiServ
         type="text"
         value={text}
         onChange={e => onHandleInput(e.target.value, setText)}
+        className={`input-field ${completed ? 'strikethrough' : ''}`}
       />
 
       <Button variant="success" onClick={updateTask}>

@@ -71,7 +71,7 @@ function App() {
           )}
         </div>
 
-        <div>
+        <div className="full-width">
           {tasks.length ? (
             <>
               {tasks.map(task => <TaskComponent api={api} task={task} onLoadTasks={loadTasks} onHandleInput={handleChange} key={task.id} />)}

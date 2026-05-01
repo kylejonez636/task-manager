@@ -9,8 +9,8 @@ exports.validate = (method) => {
     if (data?.tasks.findIndex(t => t.id === value) === -1) return Promise.reject('Task not found');
     else return Promise.resolve();
   });
-  const textRequired = () => body('text', 'text cannot be empty').trim().escape().not().isEmpty();
-  const textOptional = () => body('text', 'text cannot be an empty string').optional().trim().escape().not().isEmpty();
+  const textRequired = () => body('text', 'text must be between 1 and 50 characters').trim().escape().not().isEmpty().isLength({ max: 50 });
+  const textOptional = () => body('text', 'text must be between 1 and 50 characters').optional().trim().escape().not().isEmpty().isLength({ max: 50 });
 
   switch (method) {
     case 'post':
